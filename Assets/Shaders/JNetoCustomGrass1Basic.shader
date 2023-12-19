@@ -1,4 +1,4 @@
-Shader "Unlit/JNetoCustomGrassBasic"
+Shader "Unlit/JNetoCustomGrass1Basic"
 {
 
     Properties 
@@ -126,7 +126,6 @@ Shader "Unlit/JNetoCustomGrassBasic"
                 #pragma fragment frag
                 #pragma geometry geom
                 
-                
                 // Transforms form Object Space (VertexInput i) to world Space (VertexOutput o).
                 // in order to the geometry shader generate teh grass.
                 VertexOutput geomVert(VertexInput i)
@@ -145,9 +144,7 @@ Shader "Unlit/JNetoCustomGrassBasic"
                 void geom(point VertexOutput input[1], inout TriangleStream<GeomData> triStream)
                 {
                     float3 pos = input[0].vertex.xyz;
-                    float3 normal = input[0].normal;
-                    float4 tangent = input[0].tangent;
-
+                
                     // identity matrix for transformations
                     float3x3 identity = float3x3
                     (

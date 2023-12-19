@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CustomGrass
-  m_Shader: {fileID: 4800000, guid: 6cf87d9069087684e86695aefef51add, type: 3}
+  m_Shader: {fileID: 4800000, guid: 285d9836dc6f4f37bc995d814e96e808, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -97,12 +97,12 @@ Material:
     - _AlphaToMask: 0
     - _BendDelta: 0.2
     - _BladeBendCurve: 2
-    - _BladeBendDistance: 0.38
-    - _BladeHeightMax: 1.474
-    - _BladeHeightMin: 0.1
+    - _BladeBendDistance: 0.4
+    - _BladeHeightMax: 2
+    - _BladeHeightMin: 0.5
     - _BladeSegments: 3
-    - _BladeWidthMax: 0.05
-    - _BladeWidthMin: 0.02
+    - _BladeWidthMax: 0.1
+    - _BladeWidthMin: 0.08
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
