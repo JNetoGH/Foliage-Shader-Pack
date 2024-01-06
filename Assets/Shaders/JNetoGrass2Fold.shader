@@ -1,33 +1,22 @@
-Shader "Unlit/JNetoCustomGrass3Shapes"
+Shader "Unlit/JNetoGrass2Fold"
 {
 
     Properties 
     {
         // SHADER VARIABLES ASSIGNED VIA MATERIAL
-        [Header(Base Texture)] [Space]
+        
+	    [Header(Base Texture)] [Space]
         _TintTop("Tint (Top)", Color) = (1, 1, 1, 1)
         _TintBottom("Tint (Bottom)", Color) = (0, 0, 0, 1)
         _Albedo("Albedo", 2D) = "white" {}
-        
-    	[Header(Folding)] [Space]
+    	
+        [Header(Folding)] [Space]
     	_FoldFactor("Fold Factor", Range(-2, 2)) = 0.14	// Controls the degree of folding applied to the grass leaves.
-    	
-    	[Header(Curvature)] [Space]
-    	_CurveDistance("Distance", Range(0, 1)) = 0.4	// Manages the extent of curvature along the grass blades.
-    	_CurveIntensity("Intensity", Range(1, 6)) = 3	// Adjusts the intensity of curvature along the grass blades.
-    	
-    	[Header(Width)] [Space]
-        _MinWidth("Min", Range(0, 0.1)) = 0.08
-        _MaxWidth("Max", Range(0, 2)) = 0.1
-    	
-    	[Header(Height)] [Space]
-        _MinHeight("Min", Range(0, 2)) = 0.5
-        _MaxHeight("Max", Range(0, 4)) = 0.75
     }
 
     SubShader
     {
-	    
+    	
         Tags {
         	// Geometry tag on queue means it'll be rendered after the background but before transparent objects.
         	"Queue" = "Geometry"                    // Defines the rendering queue for the object
@@ -40,58 +29,42 @@ Shader "Unlit/JNetoCustomGrass3Shapes"
         
         HLSLINCLUDE
 
-            // Defining PI to rotate the Leaves.
+            // Defining PI to rotate the blades.
             #define PI 3.14
 			#define TWO_PI 6.28
-            
-            // total of segments into the geometry to make different shapes.
-            #define NUM_OF_SEGMENTS 4
             
             // Including the URP Shader Libraries
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             
             // Redefining properties as HLSL properties in the required CBuffer
             CBUFFER_START(UnityPerMaterial)
-
-				// Base Textures
-				float4 _TintTop;
+            
                 float4 _TintBottom;
+                float4 _TintTop;
                 sampler2D _Albedo;
-
-                // Grass Folding
 				float _FoldFactor;
-            
-				// Grass Curvature
-				float _CurveDistance;
-				float _CurveIntensity;
-            
-				// Grass Shape
-                float _MinWidth;
-                float _MaxWidth;
-                float _MinHeight;
-                float _MaxHeight;
             
             CBUFFER_END
             
             struct VertexInput
             {
                 float4 vertex : POSITION; // Semantics meaning: object space position
-                float3 normal:	NORMAL;
+                float3 normal: NORMAL;
                 float4 tangent: TANGENT;
             };
 
             struct VertexOutput
             {
                 float4 vertex : SV_POSITION; // Semantics meaning: clip space position
-                float3 normal:	NORMAL;
+                float3 normal: NORMAL;
                 float4 tangent: TANGENT;
             };
 
             struct GeomData
             {
-                float4 pos :		SV_POSITION;// vertex position: clip space position
-                float2 uv :			TEXCOORD0;	// UV Coord
-                float3 worldPos:	TEXCOORD1;	// world space position
+                float4 pos : SV_POSITION; // vertex position: clip space position
+                float2 uv : TEXCOORD0; // UV Coord
+                float3 worldPos: TEXCOORD1; // world space position
             };
 
             // Geometry functions derived from Roystan's tutorial:
@@ -136,6 +109,7 @@ Shader "Unlit/JNetoCustomGrass3Shapes"
 				);
 			}
             
+            
         ENDHLSL
 
         Pass
@@ -146,7 +120,7 @@ Shader "Unlit/JNetoCustomGrass3Shapes"
             
             HLSLPROGRAM
                 
-                // Shader declarations: Tell the HLSL which shader is the fragment, vertex, and geometry shader.
+                // Shader declarations: Tell the HLSL which shader is the fragment and the vertex shader.
                 #pragma require geometry
                 #pragma vertex vert
                 #pragma fragment frag
@@ -162,17 +136,14 @@ Shader "Unlit/JNetoCustomGrass3Shapes"
                     o.tangent = i.tangent;
                     return o;
                 }
-                
-                // Generates vertices to represent grass blades:
-                // - Takes a single vertex position and the geometry data struct
-                // - TriangleStream<GeomData> acts like a list of vertex data
-                // - Each blade is defined in tangent space, so it points along the vertex normal vectors,
-                //   then and a transformation is applied from tangent to local space.
-                // - Max number of vertexes of the geom shader, NOW DEPENDS ON THE BLADE_SEGMENTS,
-                //   can output for each vertex input
-                [maxvertexcount(NUM_OF_SEGMENTS * 2 + 1)]
+            
+                // Takes a single vertex position and the geometry data struct
+                // TriangleStream<GeomData> acts like a list of vertex data
+                [maxvertexcount(3)] // max number of vertexes the geom shader can output for each vertex input, 3 => 1 triangle.
                 void geom(point VertexOutput input[1], inout TriangleStream<GeomData> triStream)
                 {
+                    // Each blade must be defined in tangent space, so it points along the vertex normal vectors,
+                    // then apply a transformation from tangent to local space.
                     float3 pos = input[0].vertex.xyz;
                     float3 normal = input[0].normal;
                     float4 tangent = input[0].tangent;
@@ -185,7 +156,7 @@ Shader "Unlit/JNetoCustomGrass3Shapes"
 						tangent.y, bitangent.y, normal.y,
 						tangent.z, bitangent.z, normal.z
 					);
-
+            	
             		// Using the definition for Pi:
                     // 1) Rotates around the normal vector (y-axis) a random amount.
             		// 2) Rotates around the bottom of the blade (X-axis) a random amount.
@@ -194,29 +165,20 @@ Shader "Unlit/JNetoCustomGrass3Shapes"
 
 					// Transform the grass blades to the correct tangent space.
             		// Only the tip vertex is influenced by the bend transformation.
+            		// The vertical offset must be on the z-axis because it's in Tangent Space.
+					// before transforming it to clip space
 					float3x3 baseTransformationMatrix = mul(tangentToLocal, randRotMatrix);
 					float3x3 tipTransformationMatrix = mul(mul(tangentToLocal, randBendMatrix), randRotMatrix);
-
-            		// generates each segment based on the Shader properties
-					float width  = lerp(_MinWidth, _MaxWidth, rand(pos.xzy));
-					float height = lerp(_MinHeight, _MaxHeight, rand(pos.zyx));
-					float forward = rand(pos.yyz) * _CurveDistance;
             	
-            		// Makes the vertices of the grass blade.
-            		// The vertical offset must be on the z-axis because it's in Tangent Space. before transforming it to clip space.
-            		// Create blade segments by adding two vertices at once.
-					for (int i = 0; i < 4; ++i)
-					{
-						float t = i / (float)NUM_OF_SEGMENTS;
-						float3 offset = float3(width * (1 - t), pow(t, _CurveIntensity) * forward, height * t);
-						float3x3 transformationMatrix = (i == 0) ? baseTransformationMatrix : tipTransformationMatrix;
-						triStream.Append(TransformGeomToClip(pos, float3( offset.x, offset.y, offset.z), transformationMatrix, float2(0, t)));
-						triStream.Append(TransformGeomToClip(pos, float3(-offset.x, offset.y, offset.z), transformationMatrix, float2(1, t)));
-					}
+            		// Makes the 3 vertices of the grass blade
+            		// The vertical offset must be on the z-axis because it's in Tangent Space.
+                    triStream.Append(TransformGeomToClip(
+                    	pos, float3(-0.1f, 0.0f, 0.0f), baseTransformationMatrix, float2(0.0f, 0.0f)));
+                    triStream.Append(TransformGeomToClip(
+                    	pos, float3(0.1f, 0.0f, 0.0f),  baseTransformationMatrix, float2(1.0f, 0.0f)));
+                    triStream.Append(TransformGeomToClip(
+                    	pos, float3(0.0f, 0.0f, 0.5f),  tipTransformationMatrix, float2(0.5f, 1.0f)));
 
-					// AddS the final vertex at the tip of the grass blade.
-					triStream.Append(TransformGeomToClip(pos, float3(0, forward, height), tipTransformationMatrix, float2(0.5, 1)));
-            	
                     // Ends the current triangle strip and starts a new one .
                     triStream.RestartStrip();   
                 }
