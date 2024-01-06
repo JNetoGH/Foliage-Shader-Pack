@@ -1,7 +1,7 @@
 ![image](https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/4987003b-1d69-49c1-b5b9-1a97191e66e7)
 
 
-# JNeto Folliage Shader
+# JNeto Foliage Shader
 João Neto (a22200558)
 
 <br>
