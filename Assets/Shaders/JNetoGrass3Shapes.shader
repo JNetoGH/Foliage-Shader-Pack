@@ -1,3 +1,4 @@
+// Developed by: João Neto
 Shader "Unlit/JNetoGrass3Shapes"
 {
 
@@ -221,7 +222,7 @@ Shader "Unlit/JNetoGrass3Shapes"
                     triStream.RestartStrip();   
                 }
 
-                // Blends the blade texture with the base and tip color using lerp.
+                // Blends the base texture with the bottom and top tint using lerp.
                 float4 frag(GeomData i): SV_Target
                 {
                     float4 color = tex2D(_Albedo, i.uv);

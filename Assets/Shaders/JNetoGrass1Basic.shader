@@ -1,3 +1,4 @@
+// Developed by: João Neto
 Shader "Unlit/JNetoGrass1Basic"
 {
 
@@ -112,7 +113,7 @@ Shader "Unlit/JNetoGrass1Basic"
                         0, 0, 1
                     );
 
-                    // Makes the 3 vertices of the grass blade 
+                    // Makes the 3 vertices of the grass leaf
                     triStream.Append(TransformGeomToClip(pos, float3(-0.1, 0, 0), identity, float2(0, 0)));
                     triStream.Append(TransformGeomToClip(pos, float3(0.1, 0, 0),  identity, float2(1, 0)));
                     triStream.Append(TransformGeomToClip(pos, float3(0, 0.5, 0),  identity, float2(0.5, 1)));
@@ -121,7 +122,7 @@ Shader "Unlit/JNetoGrass1Basic"
                     triStream.RestartStrip();   
                 }
 
-                // Blends the blade texture with the base and tip color using lerp.
+                // Blends the base texture with the bottom and top tint using lerp.
                 float4 frag(GeomData i): SV_Target
                 {
                     float4 color = tex2D(_Albedo, i.uv);
