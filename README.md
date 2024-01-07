@@ -22,6 +22,15 @@ Do not attempt to update the Unity version to any above 2021 LTS, it may cause c
 <br>
 
 ##  FEATURES
+**Flexibity**
+You can apply this shader to generate foliage on pretty much any object with a mesh.
+
+https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/2bd31a88-2d45-42b5-b244-5f266db52a2f
+
+<br>
+
+**Customization**
+The leaves are completely brown customizable in color, shape, curvature, speed.
 
 https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/d9e61405-092d-4aa1-bbd3-b4ca8e639174
 
