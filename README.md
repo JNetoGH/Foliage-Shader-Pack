@@ -109,6 +109,9 @@ https://danielilett.com/2022-12-05-tut6-2-six-grass-techniques/
 **Rendering Grass In Unity URP Using Noise and Geometry Shaders** (Ned Makes Games): <br>
 https://www.youtube.com/watch?v=YghAbgCN8XA
 
+**Stylised Grass with Shaders in URP (Daniel Ilett):** <br>
+https://danielilett.com/2021-08-24-tut5-17-stylised-grass/
+
 **Blade Grass! Generate and Bake a Field Mesh Using a Compute Shader** (Ned Makes Games): <br>
 https://www.youtube.com/watch?v=6SFTcDNqwaA&t=484s
 
