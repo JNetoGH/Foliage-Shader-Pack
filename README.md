@@ -8,7 +8,12 @@ João Neto (a22200558)
 <br>
 
 ## PREVIEW
-https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/7751859f-7268-4619-8d1c-16b7c9adc2d9
+
+
+https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/e09d0638-80e0-4a9f-a770-0354d41e4a7c
+
+
+
 
 <br>
 <br>
@@ -30,7 +35,7 @@ https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/2bd31a88-2d45-42b
 <br>
 
 **Customization**
-The leaves are completely brown customizable in color, shape, curvature, speed.
+The leaves are completely brown customizable in color, shape, curvature and speed.
 
 https://github.com/JNetoGH/Foliage-Shader-Pack/assets/24737993/d9e61405-092d-4aa1-bbd3-b4ca8e639174
 
